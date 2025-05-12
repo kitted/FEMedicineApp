@@ -99,9 +99,8 @@ function ChiTietBenhNhan() {
       }
       const newUser = await PatientService.create(values);
       toast.success("Tạo hồ sơ bệnh nhân thành công!");
-      console.log({ a: newUser });
       setIdNewUser(newUser.data._id.toString());
-      getProfile();
+      setCreateProfile(true);
       // actions.setSubmitting(false);
       // actions.resetForm();
       // setTimeout(() => {

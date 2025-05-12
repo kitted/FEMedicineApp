@@ -83,10 +83,10 @@ function InfoHoSo({ formData }) {
   if (id && containsEdit && (!getData || Object.keys(getData).length === 0)) {
     return <>Loading...</>;
   }
-  const handleSetSexValue = (value) => {
-    setSexValue({ value: value, label: value === "male" ? "Nam" : "Nữ" });
-    setFieldValue(sex.name, value);
-  };
+  // const handleSetSexValue = (value) => {
+  //   setSexValue({ value: value, label: value === "male" ? "Nam" : "Nữ" });
+  //   setFieldValue(sex.name, value);
+  // };
   return (
     <SoftBox>
       <SoftBox lineHeight={0}>

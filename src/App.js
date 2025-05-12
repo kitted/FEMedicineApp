@@ -26,6 +26,7 @@ import AccessDenied from "layouts/authentication/error/AccessDenied";
 
 // Soft UI Dashboard PRO React contexts
 import { useSoftUIController, setMiniSidenav, setOpenConfigurator } from "context";
+import axios from "axios";
 
 // Images
 import "./assets/style/custom.css";
