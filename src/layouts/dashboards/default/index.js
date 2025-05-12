@@ -181,19 +181,41 @@ function Default() {
       context.clearRect(0, 0, canvas.width, canvas.height);
 
       const amount = particleRate * deltaTime;
-      for (let i = 0; i < amount; i++) {
-        const pos = pointOnHeart(Math.PI - 2 * Math.PI * Math.random());
-        const dir = pos.clone().length(settings.particles.velocity);
-        particlePool.add(canvas.width / 2 + pos.x, canvas.height / 2 - pos.y, dir.x, -dir.y);
-      }
+      // for (let i = 0; i < amount; i++) {
+      //   const pos = pointOnHeart(Math.PI - 2 * Math.PI * Math.random());
+      //   const dir = pos.clone().length(settings.particles.velocity);
+      //   particlePool.add(canvas.width / 2 + pos.x, canvas.height / 2 - pos.y, dir.x, -dir.y);
+      // }
+      // const centerX = canvas.width / 2;
+      // const centerY = canvas.height / 2;
+      // for (let i = 0; i < amount; i++) {
+      //   const pos = pointOnHeart(Math.PI - 2 * Math.PI * Math.random());
+      //   const dir = pos.clone().length(settings.particles.velocity);
+      //   particlePool.add(centerX + pos.x, centerY - pos.y, dir.x, -dir.y);
+      // }
 
       particlePool.update(deltaTime);
       particlePool.draw(context, particleImage);
+
+      const baseSize = 600;
+      const scale = Math.min(canvas.width, canvas.height) / baseSize;
+
+      for (let i = 0; i < amount; i++) {
+        const pos = pointOnHeart(Math.PI - 2 * Math.PI * Math.random());
+
+        // scale vị trí
+        pos.x *= scale;
+        pos.y *= scale;
+
+        const dir = pos.clone().length(settings.particles.velocity);
+        particlePool.add(canvas.width / 2 + pos.x, canvas.height / 2 - pos.y, dir.x, -dir.y);
+      }
     }
 
     function onResize() {
-      canvas.width = canvas.clientWidth;
-      canvas.height = canvas.clientHeight;
+      const rect = canvas.getBoundingClientRect();
+      canvas.width = rect.width;
+      canvas.height = rect.height;
     }
 
     window.addEventListener("resize", onResize);
@@ -212,16 +234,16 @@ function Default() {
       <Grid container spacing={3}>
         <Grid item xs={12} lg={12}>
           <div style={{ height: "100%" }}>
-            <Card sx={{ height: "600px", position: "relative", background: "#000" }}>
+            <Card sx={{ height: "600px", position: "relative", background: "white" }}>
               <canvas
-                id="pinkboard"
                 ref={canvasRef}
                 style={{
-                  width: "100%",
-                  height: "100%",
+                  display: "block",
                   position: "absolute",
                   top: 0,
                   left: 0,
+                  width: "100%", // Để layout đúng
+                  height: "100%", // Để layout đúng
                 }}
               />
               <div
