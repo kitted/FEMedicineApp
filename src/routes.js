@@ -5,7 +5,7 @@ import Shop from "examples/Icons/Shop";
 import Office from "examples/Icons/Office";
 import ChiTietBenhNhan from "layouts/quan-ly-benh-nhan/chi-tiet";
 import QuanLyBenhNhan from "layouts/quan-ly-benh-nhan";
-// import ChiTietECG from "layouts/quan-ly-benh-nhan/chi-tiet-ecg";
+import HoSo from "layouts/quan-ly-benh-nhan/ho-so";
 
 const routes = [
   {
@@ -78,14 +78,14 @@ const routes = [
       //   permission: ["admin"],
       //   hidden: true,
       // },
-      // {
-      //   name: "Bệnh nhân",
-      //   key: "quan-ly-benh-nhan",
-      //   route: "/quan-ly-benh-nhan/ecg/create/:id",
-      //   component: <ChiTietECG />,
-      //   permission: ["admin"],
-      //   hidden: true,
-      // },
+      {
+        name: "Bệnh nhân",
+        key: "quan-ly-benh-nhan",
+        route: "/quan-ly-benh-nhan/ecg/create/:id",
+        component: <HoSo />,
+        permission: ["admin"],
+        hidden: true,
+      },
     ],
     noCollapse: true,
   },

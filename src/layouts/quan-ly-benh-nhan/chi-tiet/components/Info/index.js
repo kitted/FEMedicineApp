@@ -16,7 +16,6 @@ import FormField from "../FormField";
 function Info({ formData }) {
   const { formField, values, errors, touched, getData, onChangeValue, setFieldValue } = formData;
   const { username, age, sex, address } = formField;
-  console.log({ formField });
   const { username: usernameV, age: ageV, sex: sexV, address: addressV } = values;
   const { id } = useParams();
 
@@ -118,6 +117,8 @@ function Info({ formData }) {
               value={addressV}
               error={errors.address && touched.address}
               disabled={id && !containsEdit}
+              multiline
+              rows={4}
             />
           </Grid>
         </Grid>

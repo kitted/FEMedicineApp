@@ -59,6 +59,8 @@ function ChiTietBenhNhan() {
   const [data, setData] = useState({});
   const [getDataProfile, setGetDataProfile] = useState([]);
   const [idNewUser, setIdNewUser] = useState({});
+  const [createProfile, setCreateProfile] = useState(id ? true : false);
+  const [refresh, setRefresh] = useState(1);
 
   useEffect(() => {
     if (!id) return;
@@ -74,7 +76,7 @@ function ChiTietBenhNhan() {
       const { data } = await ProfileService.getAll(id, {});
       setGetDataProfile(data.items || []);
     })();
-  }, [id]);
+  }, [id, refresh]);
 
   const onChangeValue = (type, value) => {
     setData((prev) => ({ ...prev, [type]: value }));
@@ -97,6 +99,7 @@ function ChiTietBenhNhan() {
       toast.success("Tạo hồ sơ bệnh nhân thành công!");
       console.log({ a: newUser });
       setIdNewUser(newUser.data._id.toString());
+      getProfile();
       // actions.setSubmitting(false);
       // actions.resetForm();
       // setTimeout(() => {
@@ -166,6 +169,18 @@ function ChiTietBenhNhan() {
   const handleClose = () => {
     setOpen(false);
   };
+  const handleDeleteProfile = async (idProfile) => {
+    try {
+      await ProfileService.delete(idProfile);
+      handleClose();
+      toast.success("Xoá thông tin ECG bệnh nhân thành công!");
+      setRefresh((prev) => prev + 1);
+    } catch (error) {
+      toast.error("Xoá thất bại");
+      console.log("🍕 ~ error:", error);
+      handleClose();
+    }
+  };
   return (
     <DashboardLayout>
       <DashboardNavbar />
@@ -201,14 +216,16 @@ function ChiTietBenhNhan() {
 
                           {/* Nhóm nút Delete + Cập nhật/Tạo nằm bên phải */}
                           <SoftBox display="flex" gap={1}>
-                            {(id || containsEdit) && (
-                              <SoftButton
-                                onClick={handleClickOpen}
-                                variant="gradient"
-                                color="error"
-                              >
-                                <Icon>delete</Icon>
-                              </SoftButton>
+                            {id && !containsEdit && (
+                              <>
+                                <SoftButton
+                                  onClick={handleClickOpen}
+                                  variant="gradient"
+                                  color="error"
+                                >
+                                  <Icon>delete</Icon>
+                                </SoftButton>
+                              </>
                             )}
 
                             {id && containsEdit && (
@@ -262,102 +279,111 @@ function ChiTietBenhNhan() {
           </Dialog>
         </Grid>
       </SoftBox>
-      <SoftBox mt={2}>
-        <SoftBox
-          mt={2}
-          mb={2}
-          width="100%"
-          display="flex"
-          justifyContent="space-between"
-          alignItems="center"
-        >
-          <SoftTypography variant="h5" fontWeight="bold">
-            Các lần đo ECG: {getDataProfile.length}
-          </SoftTypography>
-
-          <Link
-            to={`/quan-ly-benh-nhan/ecg/create/${id || idNewUser}`}
-            style={{ textDecoration: "none" }}
+      {createProfile && (
+        <SoftBox mt={2}>
+          <SoftBox
+            mt={2}
+            mb={2}
+            width="100%"
+            display="flex"
+            justifyContent="space-between"
+            alignItems="center"
           >
-            <SoftButton variant="gradient" color="dark">
-              Thêm ECG mới
-            </SoftButton>
-          </Link>
-        </SoftBox>
+            <SoftTypography variant="h5" fontWeight="bold">
+              Các lần đo ECG: {getDataProfile.length}
+            </SoftTypography>
 
-        <Grid container spacing={2}>
-          {getDataProfile.map((visit, index) => (
-            <Grid item xs={12} sm={12} md={8} lg={6} key={index}>
-              <Card
-                sx={{
-                  background: colorPool[index % colorPool.length],
-                  color: "white",
-                  height: "100%",
-                  borderRadius: 3,
-                  boxShadow: 6,
-                  transition: "transform 0.3s",
-                  "&:hover": {
-                    transform: "scale(1.03)",
-                  },
-                }}
-              >
-                <SoftBox p={2}>
-                  <SoftTypography variant="h6" fontWeight="bold" color="white">
-                    Ngày khám: {time(visit.createdAt)}
-                  </SoftTypography>
-                  <SoftTypography color="white" variant="body2" mt={2}>
-                    Chuẩn đoán: {visit.diagnosis}
-                  </SoftTypography>
-                  <SoftTypography color="white" variant="body2" mt={2}>
-                    Tần số: {visit.ecg[0].frequency}
-                  </SoftTypography>
-                  <SoftTypography color="white" variant="body2" mt={1}>
-                    Nhịp: {visit.ecg[0].rhythm}
-                  </SoftTypography>
-                  <SoftTypography color="white" variant="body2" mt={1}>
-                    Trục: {visit.ecg[0].axis}
-                  </SoftTypography>
-                  <SoftTypography color="white" variant="body2" mt={1}>
-                    Sóng P: {visit.ecg[0].waveP}
-                  </SoftTypography>
-                  <SoftTypography color="white" variant="body2" mt={1}>
-                    Sóng T: {visit.ecg[0].waveT}
-                  </SoftTypography>
-                  <SoftTypography color="white" variant="body2" mt={1}>
-                    QRS: {visit.ecg[0].QRS}
-                  </SoftTypography>
-                  <SoftTypography color="white" variant="body2" mt={1}>
-                    ST: {visit.ecg[0].ST}
-                  </SoftTypography>
-                  <SoftTypography color="white" variant="body2" mt={1}>
-                    Góc: {visit.ecg[0].corner}
-                  </SoftTypography>
-                  <SoftTypography color="white" variant="body2" mt={1}>
-                    Chu kỳ: {visit.ecg[0].cycle}
-                  </SoftTypography>
-                  <SoftTypography color="white" variant="body2" mt={1}>
-                    Khoảng cách PR: {visit.ecg[0].distancePR}
-                  </SoftTypography>
-                  <SoftTypography color="white" variant="body2" mt={1}>
-                    Khoảng cách QT: {visit.ecg[0].distanceQT}
-                  </SoftTypography>
-                  <SoftTypography color="white" variant="body2" mt={1}>
-                    Kết luận: {visit.ecg[0].conclude}
-                  </SoftTypography>
-                  <SoftTypography color="white" variant="body2" mt={1}>
-                    Kết quả: {visit.result}
-                  </SoftTypography>
-                  <SoftBox mt={2} width="100%" display="flex" justifyContent="space-between">
-                    <SoftButton variant="gradient" color="light">
-                      In
-                    </SoftButton>
+            <Link
+              to={`/quan-ly-benh-nhan/ecg/create/${id || idNewUser}`}
+              style={{ textDecoration: "none" }}
+            >
+              <SoftButton variant="gradient" color="dark">
+                Thêm ECG mới
+              </SoftButton>
+            </Link>
+          </SoftBox>
+
+          <Grid container spacing={2}>
+            {getDataProfile.map((visit, index) => (
+              <Grid item xs={12} sm={12} md={8} lg={6} key={index}>
+                <Card
+                  sx={{
+                    background: colorPool[index % colorPool.length],
+                    color: "white",
+                    height: "100%",
+                    borderRadius: 3,
+                    boxShadow: 6,
+                    transition: "transform 0.3s",
+                    "&:hover": {
+                      transform: "scale(1.03)",
+                    },
+                  }}
+                >
+                  <SoftBox p={2}>
+                    <SoftTypography variant="h6" fontWeight="bold" color="white">
+                      Ngày khám: {time(visit.createdAt)}
+                    </SoftTypography>
+                    <SoftTypography color="white" variant="body2" mt={2}>
+                      Chuẩn đoán: {visit.diagnosis}
+                    </SoftTypography>
+                    <SoftTypography color="white" variant="body2" mt={2}>
+                      Tần số: {visit.ecg[0].frequency}
+                    </SoftTypography>
+                    <SoftTypography color="white" variant="body2" mt={1}>
+                      Nhịp: {visit.ecg[0].rhythm}
+                    </SoftTypography>
+                    <SoftTypography color="white" variant="body2" mt={1}>
+                      Trục: {visit.ecg[0].axis}
+                    </SoftTypography>
+                    <SoftTypography color="white" variant="body2" mt={1}>
+                      Sóng P: {visit.ecg[0].waveP}
+                    </SoftTypography>
+                    <SoftTypography color="white" variant="body2" mt={1}>
+                      Sóng T: {visit.ecg[0].waveT}
+                    </SoftTypography>
+                    <SoftTypography color="white" variant="body2" mt={1}>
+                      QRS: {visit.ecg[0].QRS}
+                    </SoftTypography>
+                    <SoftTypography color="white" variant="body2" mt={1}>
+                      ST: {visit.ecg[0].ST}
+                    </SoftTypography>
+                    <SoftTypography color="white" variant="body2" mt={1}>
+                      Góc: {visit.ecg[0].corner}
+                    </SoftTypography>
+                    <SoftTypography color="white" variant="body2" mt={1}>
+                      Chu kỳ: {visit.ecg[0].cycle}
+                    </SoftTypography>
+                    <SoftTypography color="white" variant="body2" mt={1}>
+                      Khoảng cách PR: {visit.ecg[0].distancePR}
+                    </SoftTypography>
+                    <SoftTypography color="white" variant="body2" mt={1}>
+                      Khoảng cách QT: {visit.ecg[0].distanceQT}
+                    </SoftTypography>
+                    <SoftTypography color="white" variant="body2" mt={1}>
+                      Kết luận: {visit.ecg[0].conclude}
+                    </SoftTypography>
+                    <SoftTypography color="white" variant="body2" mt={1}>
+                      Kết quả: {visit.result}
+                    </SoftTypography>
+                    <SoftBox mt={2} width="100%" display="flex" justifyContent="space-between">
+                      <SoftButton variant="gradient" color="light">
+                        In
+                      </SoftButton>
+                      <SoftButton
+                        variant="gradient"
+                        color="error"
+                        onClick={() => handleDeleteProfile(visit._id.toString())}
+                      >
+                        Xoá
+                      </SoftButton>
+                    </SoftBox>
                   </SoftBox>
-                </SoftBox>
-              </Card>
-            </Grid>
-          ))}
-        </Grid>
-      </SoftBox>
+                </Card>
+              </Grid>
+            ))}
+          </Grid>
+        </SoftBox>
+      )}
     </DashboardLayout>
   );
 }
