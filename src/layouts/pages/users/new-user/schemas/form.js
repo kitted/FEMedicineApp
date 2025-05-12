@@ -1,0 +1,92 @@
+const form = {
+  formId: "new-user-form",
+  formField: {
+    hoVaTen: {
+      name: "hoVaTen",
+      label: "Họ Và Tên",
+      type: "text",
+      placeholder: "",
+      errorMsg: "First name is required.",
+    },
+    diDen: {
+      name: "diDen",
+      label: "Điểm Đón",
+      type: "text",
+      placeholder: "eg. Prior",
+      errorMsg: "Last name is required.",
+    },
+    diVe: {
+      name: "diVe",
+      label: "Điểm Đến",
+      type: "text",
+      placeholder: "eg. Creative Tim",
+    },
+    loaiDichVu: {
+      name: "loaiDichVu",
+      label: "Loại dịch vụ",
+      type: "text",
+      placeholder: "eg. soft@dashboard.come",
+      errorMsg: "Email address is required.",
+      invalidMsg: "Your email address is invalid",
+    },
+    loaiXeYeuCau: {
+      name: "loaiXeYeuCau",
+      label: "Loại Xe Yêu Cầu",
+      type: "text",
+      placeholder: "",
+      errorMsg: "Password is required.",
+      invalidMsg: "Your password should be more than 6 characters.",
+    },
+    thoiGianDi: {
+      name: "thoiGianDi",
+      label: "Thời Gian Đi",
+      type: "password",
+      placeholder: "",
+      errorMsg: "Password is required.",
+      invalidMsg: "Your password doesn't match.",
+    },
+    thoiGianVe: {
+      name: "thoiGianVe",
+      label: "Thời Gian Về",
+      type: "text",
+      placeholder: "eg. Street 111",
+      errorMsg: "Address is required.",
+    },
+    cccd: {
+      name: "cccd",
+      label: "CCCD",
+      type: "text",
+      placeholder: "",
+    },
+    sdt: {
+      name: "sdt",
+      label: "Số Điện Thoại",
+      type: "text",
+      placeholder: "eg. Tokyo",
+      errorMsg: "City is required.",
+    },
+    email: {
+      name: "email",
+      label: "Email",
+      type: "email",
+      placeholder: "7 letters",
+      errorMsg: "Zip is required.",
+      invalidMsg: "Zipcode is not valie (e.g. 70000).",
+    },
+    diaChi: {
+      name: "diaChi",
+      label: "Địa chỉ",
+      type: "text",
+      placeholder: "@soft",
+      errorMsg: "Twitter profile is required.",
+    },
+    ghiChu: {
+      name: "ghiChu",
+      label: "Ghi chú",
+      type: "text",
+      placeholder: "https://...",
+    },
+  },
+};
+
+export default form;
