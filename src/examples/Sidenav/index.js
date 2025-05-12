@@ -228,13 +228,13 @@ function Sidenav({ color, routes, subTitle, ...rest }) {
         </SoftBox>
         {/* <div className="flex gap-5"> */}
         <SoftBox component={NavLink} to="/" display="flex" alignItems="center">
-          <div style={{ width: "100%", display: "flex", justifyContent: "center" }}>
+          {/* <div style={{ width: "100%", display: "flex", justifyContent: "center" }}>
             <img
               src={miniSidenav ? brand1 : brand2}
               alt="Soft UI Logo"
               style={{ width: miniSidenav ? "100%" : "80%" }}
             />
-          </div>
+          </div> */}
           {/* <SoftBox
             width={!brandName && "100%"}
             sx={(theme) => sidenavLogoLabel(theme, { miniSidenav })}

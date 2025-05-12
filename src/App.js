@@ -110,6 +110,31 @@ export default function App() {
     </SoftBox>
   );
 
+  const sendRequest = async () => {
+    try {
+      await axios.post(`${process.env.REACT_APP_API_URL}/auth/me`);
+    } catch (error) {
+      console.error("Error sending request:", error);
+    }
+  };
+
+  // UseEffect để gửi request mỗi 14 phút
+  useEffect(() => {
+    if (!user) return; // Nếu chưa đăng nhập thì không gửi request
+
+    const interval = setInterval(() => {
+      sendRequest(); // Gửi request mỗi 14 phút
+    }, 840000); // 14 phút = 14 * 60 * 1000 ms
+
+    // Gửi ngay khi lần đầu tiên render (nếu cần)
+    sendRequest();
+
+    // Cleanup khi component unmount
+    return () => {
+      clearInterval(interval); // Dọn dẹp interval khi component unmount
+    };
+  }, [user]); // Gửi request khi user thay đổi (login/logout)
+
   return (
     <ThemeProvider theme={themeRTL}>
       <CssBaseline />

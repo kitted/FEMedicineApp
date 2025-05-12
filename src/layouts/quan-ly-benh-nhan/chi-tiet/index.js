@@ -34,6 +34,8 @@ import {
   DialogTitle,
 } from "@mui/material";
 import { Link } from "react-router-dom";
+// import { jsPDF } from "jspdf";
+// import html2pdf from "html2pdf.js";
 
 const colorPool = [
   // "#6C5CE7",
@@ -181,6 +183,102 @@ function ChiTietBenhNhan() {
       handleClose();
     }
   };
+  // const handlePrintPDF = (visit) => {
+  //   const ecg = visit.ecg[0];
+
+  //   const htmlContent = `
+  //     <div style="font-family: Roboto, sans-serif; padding: 20px; max-width: 600px">
+  //       <h2 style="text-align: center;">Thông tin đo ECG</h2>
+  //       <p><strong>Ngày khám:</strong> ${new Date(visit.createdAt).toLocaleDateString()}</p>
+  //       <p><strong>Chuẩn đoán:</strong> ${visit.diagnosis}</p>
+  //       <p><strong>Tần số:</strong> ${ecg.frequency}</p>
+  //       <p><strong>Nhịp:</strong> ${ecg.rhythm}</p>
+  //       <p><strong>Trục:</strong> ${ecg.axis}</p>
+  //       <p><strong>Sóng P:</strong> ${ecg.waveP}</p>
+  //       <p><strong>Sóng T:</strong> ${ecg.waveT}</p>
+  //       <p><strong>QRS:</strong> ${ecg.QRS}</p>
+  //       <p><strong>ST:</strong> ${ecg.ST}</p>
+  //       <p><strong>Góc:</strong> ${ecg.corner}</p>
+  //       <p><strong>Chu kỳ:</strong> ${ecg.cycle}</p>
+  //       <p><strong>Khoảng PR:</strong> ${ecg.distancePR}</p>
+  //       <p><strong>Khoảng QT:</strong> ${ecg.distanceQT}</p>
+  //       <p><strong>Kết luận:</strong> ${ecg.conclude}</p>
+  //       <p><strong>Kết quả:</strong> ${visit.result}</p>
+  //     </div>
+  //   `;
+
+  //   const opt = {
+  //     margin: 0.5,
+  //     filename: `ECG-${visit._id}.pdf`,
+  //     image: { type: "jpeg", quality: 0.98 },
+  //     html2canvas: { scale: 2 },
+  //     jsPDF: { unit: "in", format: "a4", orientation: "portrait" },
+  //   };
+
+  //   html2pdf().set(opt).from(htmlContent).save();
+  // };
+  const handlePrintDirect = (visit) => {
+    const ecg = visit.ecg[0];
+    const printWindow = window.open("", "_blank");
+
+    const content = `
+      <html>
+        <head>
+          <title>In thông tin ECG</title>
+          <style>
+            body {
+              font-family: Roboto, sans-serif;
+              padding: 20px;
+              line-height: 1.6;
+            }
+            h2 {
+              text-align: center;
+              margin-bottom: 20px;
+            }
+            p {
+              margin: 4px 0;
+            }
+            .info {
+              border: 1px solid #ccc;
+              padding: 16px;
+              border-radius: 8px;
+            }
+          </style>
+          <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+        </head>
+        <body>
+          <div class="info">
+            <h2>Thông tin đo ECG</h2>
+            <p><strong>Ngày khám:</strong> ${time(visit.createdAt)}</p>
+            <p><strong>Chuẩn đoán:</strong> ${visit.diagnosis}</p>
+            <p><strong>Tần số:</strong> ${ecg.frequency}</p>
+            <p><strong>Nhịp:</strong> ${ecg.rhythm}</p>
+            <p><strong>Trục:</strong> ${ecg.axis}</p>
+            <p><strong>Sóng P:</strong> ${ecg.waveP}</p>
+            <p><strong>Sóng T:</strong> ${ecg.waveT}</p>
+            <p><strong>QRS:</strong> ${ecg.QRS}</p>
+            <p><strong>ST:</strong> ${ecg.ST}</p>
+            <p><strong>Góc:</strong> ${ecg.corner}</p>
+            <p><strong>Chu kỳ:</strong> ${ecg.cycle}</p>
+            <p><strong>Khoảng PR:</strong> ${ecg.distancePR}</p>
+            <p><strong>Khoảng QT:</strong> ${ecg.distanceQT}</p>
+            <p><strong>Kết luận:</strong> ${ecg.conclude}</p>
+            <p><strong>Kết quả:</strong> ${visit.result}</p>
+          </div>
+          <script>
+            window.onload = function() {
+              window.print();
+            };
+          </script>
+        </body>
+      </html>
+    `;
+
+    printWindow.document.open();
+    printWindow.document.write(content);
+    printWindow.document.close();
+  };
+
   return (
     <DashboardLayout>
       <DashboardNavbar />
@@ -366,9 +464,14 @@ function ChiTietBenhNhan() {
                       Kết quả: {visit.result}
                     </SoftTypography>
                     <SoftBox mt={2} width="100%" display="flex" justifyContent="space-between">
-                      <SoftButton variant="gradient" color="light">
+                      <SoftButton
+                        variant="gradient"
+                        color="light"
+                        onClick={() => handlePrintDirect(visit)}
+                      >
                         In
                       </SoftButton>
+
                       <SoftButton
                         variant="gradient"
                         color="error"

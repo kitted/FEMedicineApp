@@ -89,11 +89,11 @@ function HoSo() {
         ecg: values,
       };
 
-      const newUser = await ProfileService.create(payload);
+      const newProfile = await ProfileService.create(payload);
       toast.success("Tạo ECG bệnh nhân thành công!");
-      console.log({ a: newUser });
       actions.setSubmitting(false);
       actions.resetForm();
+      handlePrintDirect(newProfile.data);
       setTimeout(() => {
         navigate(-1);
       }, 1500);
@@ -101,6 +101,73 @@ function HoSo() {
       actions.setSubmitting(false);
       toast.error("Tạo ECG bệnh nhân thất bại!");
     }
+  };
+
+  const handlePrintDirect = (visit) => {
+    const ecg = Array.isArray(visit.ecg) && visit.ecg.length > 0 ? visit.ecg[0] : {};
+    const printWindow = window.open("", "_blank");
+
+    if (!printWindow) {
+      toast.error("Không thể mở cửa sổ in. Trình duyệt có thể đã chặn.");
+      return;
+    }
+
+    const content = `
+      <html>
+        <head>
+          <title>In</title>
+          <style>
+            body {
+              font-family: Roboto, sans-serif;
+              padding: 20px;
+              line-height: 1.6;
+            }
+            h2 {
+              text-align: center;
+              margin-bottom: 20px;
+            }
+            p {
+              margin: 4px 0;
+            }
+            .info {
+              border: 1px solid #ccc;
+              padding: 16px;
+              border-radius: 8px;
+            }
+          </style>
+          <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+        </head>
+        <body>
+          <div class="info">
+            <h2>KẾT QUẢ ĐIỆN TÂM ĐỒ</h2>
+            <p><strong>Ngày khám:</strong> ${time(visit.createdAt)}</p>
+            <p><strong>Chuẩn đoán:</strong> ${visit.diagnosis}</p>
+            <p><strong>Tần số:</strong> ${ecg.frequency || "N/A"}</p>
+            <p><strong>Nhịp:</strong> ${ecg.rhythm || "N/A"}</p>
+            <p><strong>Trục:</strong> ${ecg.axis || "N/A"}</p>
+            <p><strong>Sóng P:</strong> ${ecg.waveP || "N/A"}</p>
+            <p><strong>Sóng T:</strong> ${ecg.waveT || "N/A"}</p>
+            <p><strong>QRS:</strong> ${ecg.QRS || "N/A"}</p>
+            <p><strong>ST:</strong> ${ecg.ST || "N/A"}</p>
+            <p><strong>Góc:</strong> ${ecg.corner || "N/A"}</p>
+            <p><strong>Chu kỳ:</strong> ${ecg.cycle || "N/A"}</p>
+            <p><strong>Khoảng PR:</strong> ${ecg.distancePR || "N/A"}</p>
+            <p><strong>Khoảng QT:</strong> ${ecg.distanceQT || "N/A"}</p>
+            <p><strong>Kết luận:</strong> ${ecg.conclude || "N/A"}</p>
+            <p><strong>Kết quả:</strong> ${visit.result}</p>
+          </div>
+          <script>
+            setTimeout(() => {
+              window.print();
+            }, 300);
+          </script>
+        </body>
+      </html>
+    `;
+
+    printWindow.document.open();
+    printWindow.document.write(content);
+    printWindow.document.close();
   };
 
   const handleUpdate = async (values, actions) => {

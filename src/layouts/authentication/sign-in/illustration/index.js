@@ -82,7 +82,7 @@ function Illustration() {
     <div className="relative w-full h-full">
       <div className="absolute z-10  bg-red w-full h-20 p-6">
         <div className=" flex items-center justify-start gap-4">
-          <img src={brand} className="w-52" />
+          {/* <img src={brand} className="w-52" /> */}
           {/* <h5 className="text-[14px] font-bold text-center text-text ">
             Đại Học Bách Khoa <br /> TPHCM
           </h5> */}
@@ -95,9 +95,8 @@ function Illustration() {
             err ? <p style={{ color: "red" }}>{err}</p> : "Nhập tài khoản và mật khẩu để đăng nhập"
           }
           illustration={{
-            image: brand,
-            title:
-              "HỆ THỐNG ĐÁNH GIÁ, CHẤM ĐIỂM, PHÂN LOẠI CÁN BỘ, CÔNG CHỨC, VIÊN CHỨC, LAO ĐỘNG HỢP ĐỒNG HÀNG THÁNG TRONG CÁC CƠ QUAN, ĐƠN VỊ",
+            // image: brand,
+            title: "ECG APP",
             description: "",
           }}
         >
