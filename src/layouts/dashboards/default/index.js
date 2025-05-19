@@ -4,8 +4,11 @@ import DashboardLayout from "examples/LayoutContainers/DashboardLayout";
 import DashboardNavbar from "examples/Navbars/DashboardNavbar";
 import { useEffect, useRef, useState } from "react";
 import { Card } from "@mui/material";
+import useAutoRefreshUser from "hook/useAutoRefreshUser";
 
 function Default() {
+  useAutoRefreshUser();
+
   function getWindowDimensions() {
     const { innerWidth: width, innerHeight: height } = window;
     return { width, height };
